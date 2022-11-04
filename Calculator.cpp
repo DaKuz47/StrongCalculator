@@ -71,7 +71,7 @@ void Calculator::calculateOneStep() {
 }
 
 double Calculator::calculate() {
-	while (stack_numbers.getSize() > 1) {
+	while (stack_numbers.getSize() > 0 && stack_opr.getSize() > 0) {
 		calculateOneStep();
 	}
 	return stack_numbers.pop();
@@ -99,7 +99,6 @@ bool Calculator::loadDLL() {
 		FindClose(hf);
 	}
 
-	HINSTANCE hLib;
 	OperPtr f;
 
 	//Loading dll operations into our calculator
@@ -122,6 +121,7 @@ bool Calculator::loadDLL() {
 		}
 
 		operation_list[o->getName()] = o;
+
 	}
 	return true;
 }
