@@ -53,6 +53,11 @@ bool Calculator::read(char c) {
 
 	//If current prior <= prev prior, then start prev operation right now
 	while (!stack_opr.empty() && stack_opr.top() != "(" && operation != "(") {
+		if (operation_list.find(operation) == operation_list.end()) {
+			std::cerr << "Операция " << operation << " не распознана\n";
+			return false;
+		}
+
 		if (operation_list[operation]->getPriority() <= operation_list[stack_opr.top()]->getPriority()) {
 			calculateOneStep();
 		}
@@ -65,24 +70,31 @@ bool Calculator::read(char c) {
 	return true;
 }
 
+//Calculate one operation in operation stack
 void Calculator::calculateOneStep() {
 	std::string operation = stack_opr.pop();
 	operation_list[operation]->calculate(stack_numbers);
 }
 
+//full input string calculation
 double Calculator::calculate() {
 	while (stack_numbers.getSize() > 0 && stack_opr.getSize() > 0) {
 		calculateOneStep();
 	}
+	if (stack_numbers.empty()) {
+		return 0.0f;
+	}
 	return stack_numbers.pop();
 }
 
+//reset to start settings
 void Calculator::reset() {
 	negative_num = true;
 	stack_numbers.erase();
 	stack_opr.erase();
 }
 
+//DLL Loader
 bool Calculator::loadDLL() {
 	//get DLL filenames
 	std::vector<std::string>dll_name_list;
@@ -101,7 +113,7 @@ bool Calculator::loadDLL() {
 
 	OperPtr f;
 
-	//Loading dll operations into our calculator
+	//Loading dll operations into calculator
 	for (std::string name : dll_name_list) {
 		hLib = LoadLibraryA(name.c_str());
 		if (hLib == NULL) {
