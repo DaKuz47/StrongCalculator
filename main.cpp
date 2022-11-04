@@ -2,6 +2,8 @@
 
 using namespace std;
 
+
+
 int main(){
     setlocale(LC_ALL, "RU");
     bool isExit{ false };
@@ -25,6 +27,7 @@ int main(){
             isExit = true;
         }
         else {
+            calc.reset();
             sym = '\0';
             cin.ignore();
         }

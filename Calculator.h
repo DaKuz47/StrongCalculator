@@ -32,6 +32,9 @@ public:
 		
 	}
 
+	void reset() {
+		negative_num = true;
+	}
 	bool read(char c);
 	double calculate();
 	void calculateOneStep();
