@@ -8,6 +8,7 @@ int main(){
     setlocale(LC_ALL, "RU");
     bool isExit{ false };
     Calculator calc;
+    calc.loadDLL();
 
     cout << "   Перед ваши калькулятор, запишите выражение: \n";
     while (!isExit) {

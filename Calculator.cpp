@@ -1,5 +1,7 @@
 #include "Calculator.h"
 
+typedef Operation* (*OperPtr) ();
+
 bool Calculator::read(char c) {
 	//space checker
 	if (c == ' ') {
@@ -79,4 +81,47 @@ void Calculator::reset() {
 	negative_num = true;
 	stack_numbers.erase();
 	stack_opr.erase();
+}
+
+bool Calculator::loadDLL() {
+	//get DLL filenames
+	std::vector<std::string>dll_name_list;
+	std::string str = ".\\plugins\\*.dll";
+	WIN32_FIND_DATAA FindFileData;
+	HANDLE hf;
+	hf = FindFirstFileA(str.c_str(), &FindFileData);
+	if (hf != INVALID_HANDLE_VALUE)
+	{
+		do
+		{
+			dll_name_list.push_back("./plugins/" + std::string(FindFileData.cFileName));
+		} while (FindNextFileA(hf, &FindFileData) != 0);
+		FindClose(hf);
+	}
+
+	HINSTANCE hLib;
+	OperPtr f;
+
+	//Loading dll operations into our calculator
+	for (std::string name : dll_name_list) {
+		hLib = LoadLibraryA(name.c_str());
+		if (hLib == NULL) {
+			std::cerr << "Не удалось подключить DLL\n";
+			return false;
+		}
+
+		f = (OperPtr)GetProcAddress(hLib, "getOperationClass");
+		if (!f) {
+			std::cerr << "Не удалось найти функтсионал в загруженной DLL\n";
+			return false;
+		}
+
+		Operation* o = f();
+		if (o->getName() == std::string(1, o->getFirstOfName())) {
+			one_symbol_operations.insert(o->getFirstOfName());
+		}
+
+		operation_list[o->getName()] = o;
+	}
+	return true;
 }

@@ -8,6 +8,8 @@
 #include "Subtraction.h"
 #include "Multiplication.h"
 #include "Division.h"
+#include <vector>
+#include <windows.h>
 
 class Calculator
 {
@@ -34,6 +36,7 @@ public:
 
 	}
 
+	bool loadDLL();
 	void reset();
 	bool read(char c);
 	double calculate();
