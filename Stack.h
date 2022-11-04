@@ -39,6 +39,10 @@ public:
 		std::cout << stack[m_size - 1] << "\n";
 	}
 
+	void erase() {
+		m_size = 0;
+	}
+
 	int getSize() const {
 		return m_size;
 	}

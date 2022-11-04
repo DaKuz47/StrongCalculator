@@ -36,7 +36,7 @@ bool Calculator::read(char c) {
 	}
 	//operation checker
 	std::string operation{};
-	if(c == '+' || c == '-' || c == '*' || c == '/' || c == '(') {
+	if(one_symbol_operations.find(c) != one_symbol_operations.end()) {
 		if (c == '(') {
 			negative_num = true;
 		}
@@ -73,4 +73,10 @@ double Calculator::calculate() {
 		calculateOneStep();
 	}
 	return stack_numbers.pop();
+}
+
+void Calculator::reset() {
+	negative_num = true;
+	stack_numbers.erase();
+	stack_opr.erase();
 }

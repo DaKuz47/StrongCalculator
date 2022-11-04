@@ -3,6 +3,7 @@
 #include "Stack.h"
 #include <string>
 #include <map>
+#include <set>
 #include "addition.h"
 #include "Subtraction.h"
 #include "Multiplication.h"
@@ -11,6 +12,7 @@
 class Calculator
 {
 private:
+	std::set<char> one_symbol_operations{ '-', '+', '/', '*', '(' };
 	Stack<double, 30> stack_numbers;
 	Stack<std::string, 30> stack_opr;
 	std::map<std::string, Operation*> operation_list = {
@@ -19,7 +21,7 @@ private:
 		{"*", new Multiplication()},
 		{"/", new Division()}
 	};
-	bool negative_num{true};
+	bool negative_num{ true };
 
 public:
 	Calculator() = default;
@@ -29,12 +31,10 @@ public:
 		}
 	}
 	void loadLibraries() {
-		
+
 	}
 
-	void reset() {
-		negative_num = true;
-	}
+	void reset();
 	bool read(char c);
 	double calculate();
 	void calculateOneStep();
